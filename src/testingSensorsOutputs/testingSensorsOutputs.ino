@@ -1,5 +1,8 @@
 #include "Arduino_SensorKit.h"
 
+#include "LiquidCrystal_I2C.h"
+#include "Wire.h"
+
 #define Environment Environment_I2C
 
 #define MOSTURE_SENSOR_PIN A0
@@ -12,6 +15,8 @@
 #define WETLEVEL 215
 
 #define DAMPINTERVAL 50
+
+LiquidCrystal_I2C lcd(0x27,  16, 2);
 
 void checkWetDry(int moisture) {
   if (moisture > DRYLEVEL - DAMPINTERVAL) {
@@ -47,7 +52,10 @@ void setup() {
 
   Environment.begin();
 
-  Serial.println("Begining");
+  lcd.init();
+  lcd.backlight();
+
+  lcd.print("Begining");
 }
 
 void loop() {
@@ -55,11 +63,13 @@ void loop() {
   int moistureLevel = analogRead(MOSTURE_SENSOR_PIN);
   Serial.println(moistureLevel);
 
-  Serial.print("Humidity = ");
-  Serial.println(Environment.readHumidity());
+  lcd.setCursor(0,0);
+  lcd.print("Humidity:");
+  lcd.print(Environment.readHumidity());
 
-  Serial.print("Temperature = ");
-  Serial.println(Environment.readTemperature());
+  lcd.setCursor(0,1);
+  lcd.print("Temperature:");
+  lcd.print(Environment.readTemperature());
 
   checkWetDry(moistureLevel);
 
