@@ -60,18 +60,28 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  int moistureLevel = analogRead(MOSTURE_SENSOR_PIN);
-  Serial.println(moistureLevel);
+  long moistureLevel = 0;
+  for(int i = 0; i <= 100; i++) {
+    moistureLevel += analogRead(MOSTURE_SENSOR_PIN);
+    //Serial.println(moistureLevel);
 
-  lcd.setCursor(0,0);
-  lcd.print("Humidity:");
-  lcd.print(Environment.readHumidity());
 
-  lcd.setCursor(0,1);
-  lcd.print("Temperature:");
-  lcd.print(Environment.readTemperature());
 
-  checkWetDry(moistureLevel);
+    //lcd.setCursor(0,0);
+    //lcd.print("Humidity:");
+    //lcd.print(Environment.readHumidity());
 
-  delay(500);
+    //lcd.setCursor(0,1);
+    //lcd.print("Temperature:");
+    //lcd.print(Environment.readTemperature());
+
+    //checkWetDry(moistureLevel);
+
+    Serial.println(moistureLevel);
+
+    delay(500);
+  }
+
+  Serial.print("Average: ");
+  Serial.println(moistureLevel/100.0);
 }
